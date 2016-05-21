@@ -1,6 +1,7 @@
 package com.badmitrii.mine;
 
 import java.util.Random;
+import static com.badmitrii.mine.util.MineFieldParameters.*;
 import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
@@ -8,6 +9,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.validator.routines.IntegerValidator;
 
+import com.badmitrii.util.Parameters;
 import com.google.inject.assistedinject.Assisted;
 
 class MineFieldImpl implements MineField {
@@ -15,7 +17,10 @@ class MineFieldImpl implements MineField {
 	private final MineFieldType[][] field;
 
 	@Inject
-	public MineFieldImpl(@Assisted("rows") int rows, @Assisted("cols") int columns, @Assisted("bomb") int bombs) {
+	public MineFieldImpl(@Assisted Parameters parameters) {
+		int rows = parameters.get(ROWS);
+		int columns = parameters.get(COLUMNS);
+		int bombs = parameters.get(BOMBS);
 		if (rows <= 0)
 			throw new IllegalArgumentException("rows must be postive: " + rows);
 		if (columns <= 0)
@@ -89,5 +94,10 @@ class MineFieldImpl implements MineField {
 				bc.accept(i, j);
 			}
 		}
+	}
+
+	@Override
+	public MineFieldType get(int x, int y) {
+		return field[x][y];
 	}
 }

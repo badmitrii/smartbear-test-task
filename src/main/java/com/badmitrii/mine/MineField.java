@@ -10,5 +10,7 @@ public interface MineField {
 	
 	public int adjacentCount(int x, int y, MineFieldType mft);
 
-	void shuffle();
+	public void shuffle();
+	
+	public MineFieldType get(int x, int y);
 }

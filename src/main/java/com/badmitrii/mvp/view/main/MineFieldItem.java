@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import org.apache.commons.lang3.StringUtils;
 
 import com.badmitrii.mine.util.BombType;
+import com.badmitrii.util.Command;
 
 class MineFieldItem {
 	
@@ -66,6 +67,10 @@ class MineFieldItem {
 	public void reset(){
 		label.setText(StringUtils.EMPTY);
 		cardLayout.show(container, JBUTTON_LABEL);
+	}
+	
+	public void setActionListener(Command c){
+		button.addActionListener(ev -> c.execute());
 	}
 
 	public Component asComponent(){

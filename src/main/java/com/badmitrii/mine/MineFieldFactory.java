@@ -1,8 +1,9 @@
 package com.badmitrii.mine;
 
+import com.badmitrii.util.Parameters;
 import com.google.inject.assistedinject.Assisted;
 
 public interface MineFieldFactory {
 	
-	public MineField create(@Assisted("rows") int rows, @Assisted("cols") int columns, @Assisted("bomb") int bombs);
+	public MineField create(@Assisted Parameters parameters);
 }

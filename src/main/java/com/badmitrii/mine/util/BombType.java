@@ -1,6 +1,6 @@
 package com.badmitrii.mine.util;
 
 public enum BombType{
-	BOMB,
+	SIMPLE_BOMB,
 	EXPLODED_BOMB,
 }

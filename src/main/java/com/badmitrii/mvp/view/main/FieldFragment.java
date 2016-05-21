@@ -17,9 +17,9 @@ import com.badmitrii.util.Parameters;
 //In my opinion this's definitely an overkill in the case of a simple minesweeper application.
 public interface FieldFragment {
 	
-	public void reset();
+	public FieldFragment reset();
 	
-	public void reset(Parameters parameters);
+	public FieldFragment reset(Parameters parameters);
 	
 	public void showBomb(int x, int y, BombType bt);
 	

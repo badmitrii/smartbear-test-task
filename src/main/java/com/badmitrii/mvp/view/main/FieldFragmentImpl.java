@@ -3,7 +3,9 @@ package com.badmitrii.mvp.view.main;
 import static com.badmitrii.mine.util.MineFieldParameters.COLUMNS;
 import static com.badmitrii.mine.util.MineFieldParameters.ROWS;
 
+import java.awt.Component;
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 import javax.swing.JPanel;
 
@@ -17,14 +19,15 @@ class FieldFragmentImpl implements FieldFragment{
 	private MineFieldItem[][] items;
 	
 	@Override
-	public void reset() {
+	public FieldFragmentImpl reset() {
 		Arrays.stream(items)
 				.flatMap(arr -> Arrays.stream(arr))
 				.forEach(mfi -> mfi.reset());
+		return this;
 	}
 	
 	@Override
-	public void reset(Parameters parameters){
+	public FieldFragmentImpl reset(Parameters parameters){
 		container.removeAll();
 		for(int i = 0; i < parameters.get(ROWS); i++){
 			for(int j = 0; j < parameters.get(COLUMNS); j++){
@@ -33,6 +36,7 @@ class FieldFragmentImpl implements FieldFragment{
 				container.add(item.asComponent());
 			}
 		}
+		return this;
 	}
 	
 	@Override
@@ -43,5 +47,19 @@ class FieldFragmentImpl implements FieldFragment{
 	@Override
 	public void showAdjacentMineCount(int x, int y, int adjacentMineCount){
 		items[x][y].setAdjacentMine(adjacentMineCount);
+	}
+	
+	public void setClickListener(BiConsumer<Integer, Integer> bc){
+		for(int i = 0; i < items.length; i++){
+			for(int j = 0; j < items.length; j++){
+				int x = i,
+					y = j;
+				items[i][j].setActionListener(() -> bc.accept(x, y)); 
+			}
+		}
+	}
+	
+	public Component asComponent(){
+		return container;
 	}
 }
