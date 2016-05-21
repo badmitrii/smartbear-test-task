@@ -1,35 +1,67 @@
 package com.badmitrii.mvp.view.main;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import com.badmitrii.mine.util.BombType;
 
 class MineFieldItem {
 	
-	private JPanel panel;
-	private JLabel label;
-	private JButton button;
-	private CardLayout cardLayout;
+	private static final String JBUTTON_LABEL = "JBL";
+	private static final String JLABEL_LABEL = "JLL";
+	private static final Color[] ADJANCENT_COLORS = { Color.BLUE, 					//1
+														Color.GREEN, 				//2
+														Color.RED, 					//3
+														new Color( 0, 0, 139 ), 	//4
+														new Color( 165, 42, 42 ), 	//5
+														Color.BLACK,				//6
+														Color.BLACK,				//7
+														Color.BLACK,				//8
+														Color.BLACK,};				//9
+	private final JPanel container;
+	private final JLabel label;
+	private final JButton button;
+	private final CardLayout cardLayout;
 	
 	public MineFieldItem() {
 		cardLayout = new CardLayout();
-		JPanel panel = new JPanel();
-		panel.setLayout(cardLayout);
+		container = new JPanel();
+		label = new JLabel();
+		button = new JButton();
 		
+		container.setLayout(cardLayout);
+		container.add(label, JLABEL_LABEL);
+		container.add(button, JBUTTON_LABEL);
+		
+		button.setPreferredSize(new Dimension(20, 20));
+		button.setBackground(Color.GRAY);
+		
+		label.setFont(new Font("serif", Font.BOLD, label.getFont().getSize()));
+		label.setHorizontalAlignment(SwingConstants.HORIZONTAL);
+		label.setVerticalAlignment(SwingConstants.VERTICAL);
+		label.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 1.5f, 1.5f));
 	}
 	
 	public void setAdjacentMine(int adjacentCount){
-		
+		label.setText(String.valueOf(adjacentCount));
+		label.setForeground(ADJANCENT_COLORS[adjacentCount]);
+		cardLayout.show(container, JLABEL_LABEL);
 	}
 	
 	public void setBomb(BombType bombType){
-		
+		System.out.println("Set bomb");
 	}
 
-	public enum BombType{
-		BOMB,
-		EXPLODED_BOMB,
+	public Component asComponent(){
+		return container;
 	}
 }

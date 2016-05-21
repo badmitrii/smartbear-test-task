@@ -2,6 +2,7 @@ package com.badmitrii.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 class ParametersImpl implements Parameters{
 	
@@ -9,6 +10,10 @@ class ParametersImpl implements Parameters{
 	
 	public ParametersImpl() {
 		storage =  new HashMap<>();
+	}
+	
+	public ParametersImpl(Supplier<Map<Object, Object>> storageSupplier){
+		storage = storageSupplier.get();
 	}
 
 	public <T> void put(ParameterMetaData<T> metaData, T value) {
