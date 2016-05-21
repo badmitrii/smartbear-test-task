@@ -3,6 +3,8 @@ package com.badmitrii.mvp.view.main;
 import static com.badmitrii.mine.util.MineFieldParameters.COLUMNS;
 import static com.badmitrii.mine.util.MineFieldParameters.ROWS;
 
+import java.util.Arrays;
+
 import javax.swing.JPanel;
 
 import com.badmitrii.mine.util.BombType;
@@ -13,6 +15,13 @@ class FieldFragmentImpl implements FieldFragment{
 	
 	private final JPanel container = new JPanel();
 	private MineFieldItem[][] items;
+	
+	@Override
+	public void reset() {
+		Arrays.stream(items)
+				.flatMap(arr -> Arrays.stream(arr))
+				.forEach(mfi -> mfi.reset());
+	}
 	
 	@Override
 	public void reset(Parameters parameters){

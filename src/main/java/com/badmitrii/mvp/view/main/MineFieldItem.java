@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.badmitrii.mine.util.BombType;
 
 class MineFieldItem {
@@ -59,6 +61,11 @@ class MineFieldItem {
 	
 	public void setBomb(BombType bombType){
 		System.out.println("Set bomb");
+	}
+	
+	public void reset(){
+		label.setText(StringUtils.EMPTY);
+		cardLayout.show(container, JBUTTON_LABEL);
 	}
 
 	public Component asComponent(){

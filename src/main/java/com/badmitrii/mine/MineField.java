@@ -8,4 +8,7 @@ public interface MineField {
 	
 	public void iterate(BiConsumer<Integer, Integer> bc);
 	
+	public int adjacentCount(int x, int y, MineFieldType mft);
+
+	void shuffle();
 }
