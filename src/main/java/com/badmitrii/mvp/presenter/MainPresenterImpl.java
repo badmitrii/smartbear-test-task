@@ -1,31 +1,32 @@
 package com.badmitrii.mvp.presenter;
 
+import com.badmitrii.mine.MineField;
+import com.badmitrii.mvp.view.main.MainView;
 import com.badmitrii.util.Parameters;
 
 class MainPresenterImpl implements MainPresenter{
+	
+	private MainView mainView;
+	private MineField mineField;
+	
+	public MainPresenterImpl() {
+		
+	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void handleClick(int x, int y) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void newGame(Parameters parameters) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

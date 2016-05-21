@@ -7,7 +7,7 @@
 	<version>1.0.0</version>
 	<name>minesweeper</name>
 	<url>http://maven.apache.org</url>
-	<dependencies>
+	<properties>
 		<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
 		<commons.lang>3.4</commons.lang>
 		<commons.validator>1.5.0</commons.validator>
@@ -15,42 +15,44 @@
 		<governator.version>1.12.13</governator.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<javax.inject>1.0</javax.inject>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons.lang}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>${commons.validator}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>jsr250-api</artifactId>
+			<version>${javax.inject}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.governator</groupId>
+			<artifactId>governator</artifactId>
+			<version>${governator.version}</version>
+		</dependency>
 	</dependencies>
-	<dependency>
-		<groupId>org.apache.commons</groupId>
-		<artifactId>commons-lang3</artifactId>
-		<version>${commons.lang}</version>
-	</dependency>
-	<dependency>
-		<groupId>commons-validator</groupId>
-		<artifactId>commons-validator</artifactId>
-		<version>${commons.validator}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.google.inject</groupId>
-		<artifactId>guice</artifactId>
-		<version>${guice.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.google.inject.extensions</groupId>
-		<artifactId>guice-assistedinject</artifactId>
-		<version>${guice.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>javax.annotation</groupId>
-		<artifactId>jsr250-api</artifactId>
-		<version>${javax.inject}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-simple</artifactId>
-		<version>${slf4j.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.netflix.governator</groupId>
-		<artifactId>governator</artifactId>
-		<version>${governator.version}</version>
-	</dependency>
 	<build>
 		<plugins>
 			<plugin>
