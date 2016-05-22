@@ -17,7 +17,7 @@ class MineFieldImpl implements MineField {
 	private final MineFieldType[][] field;
 
 	@Inject
-	public MineFieldImpl(@Assisted Parameters parameters) {
+	MineFieldImpl(@Assisted Parameters parameters) {
 		int rows = parameters.get(ROWS);
 		int columns = parameters.get(COLUMNS);
 		int bombs = parameters.get(BOMBS);

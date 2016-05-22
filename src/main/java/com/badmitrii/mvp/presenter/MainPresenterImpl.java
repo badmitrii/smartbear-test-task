@@ -1,7 +1,9 @@
 package com.badmitrii.mvp.presenter;
 
-import static com.badmitrii.mine.MineFieldType.*;
-import static com.badmitrii.mine.util.BombType.*;
+import static com.badmitrii.mine.MineFieldType.BOMB;
+import static com.badmitrii.mine.MineFieldType.EMPTY;
+import static com.badmitrii.mine.util.BombType.EXPLODED_BOMB_APPEARANCE;
+import static com.badmitrii.mine.util.BombType.SIMPLE_BOMB_APPEARANCE;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,6 @@ import javax.inject.Inject;
 import com.badmitrii.mine.MineField;
 import com.badmitrii.mine.MineFieldFactory;
 import com.badmitrii.mine.MineFieldType;
-import com.badmitrii.mine.util.BombType;
 import com.badmitrii.mvp.view.main.MainView;
 import com.badmitrii.util.Parameters;
 
@@ -29,17 +30,22 @@ class MainPresenterImpl implements MainPresenter{
 	{
 		handlers = new HashMap<>();
 		
+		BiConsumer<Integer, Integer> showMine = (i, j) -> {
+			if(mineField.get(i, j) == BOMB)
+				mainView.field().showBomb(i, j, SIMPLE_BOMB_APPEARANCE);
+		};
+		
 		handlers.put(BOMB, (x, y) -> {
-			mineField.iterate((i, j) -> {
-				if(mineField.get(i, j) == BOMB)
-					mainView.field().showBomb(i, j, SIMPLE_BOMB);
-			});
-			mainView.field().showBomb(x, y, EXPLODED_BOMB);
+			mineField.iterate(showMine);
+			mainView.field().showBomb(x, y, EXPLODED_BOMB_APPEARANCE);
 		});
 		
 		handlers.put(EMPTY, (x, y) -> {
-			mineField.iterateEmptyFields(x, y, (i, j) -> mainView.field()
-																.showAdjacentMineCount(i, j, mineField.adjacentCount(i, j, BOMB)));
+			mineField.iterateEmptyFields(x, y, (i, j) -> {
+				mainView.field().showAdjacentMineCount(i, j, mineField.adjacentCount(i, j, BOMB));
+				if(++openedFieldCount == emptyFieldCount)
+					mineField.iterate(showMine);
+			});
 		});
 	}
 	
@@ -62,9 +68,7 @@ class MainPresenterImpl implements MainPresenter{
 
 	@Override
 	public void handleClick(int x, int y) {
-		if(mineField.get(x, y) == BOMB){
-			
-		} else if()
+		handlers.get(mineField.get(x, y)).accept(x, y);
 	}
 
 	@Override
