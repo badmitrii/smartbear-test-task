@@ -80,7 +80,7 @@ class MainPresenterImpl implements MainPresenter{
 
 	@Override
 	public void newGame(Parameters parameters) {
-		mineField = mineFieldFactory.create(parameters);
+		mineField = mineFieldFactory.create(parameters).shuffle();
 		mainView.field().reset(parameters);
 		openedFieldCount = 0;
 		emptyFieldCount = 0;

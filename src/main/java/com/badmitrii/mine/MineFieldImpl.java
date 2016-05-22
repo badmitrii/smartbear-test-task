@@ -1,7 +1,9 @@
 package com.badmitrii.mine;
 
 import java.util.Random;
+
 import static com.badmitrii.mine.util.MineFieldParameters.*;
+
 import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
@@ -16,6 +18,10 @@ class MineFieldImpl implements MineField {
 
 	private final MineFieldType[][] field;
 
+	/**
+	 * Puts all mines in the begin.
+	 * 
+	 */
 	@Inject
 	MineFieldImpl(@Assisted Parameters parameters) {
 		int rows = parameters.get(ROWS);
@@ -36,10 +42,11 @@ class MineFieldImpl implements MineField {
 					field[i][j] = MineFieldType.EMPTY;
 			}
 		}
-		shuffle();
 	}
 
-	public void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc) {
+	public final void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc) {
+		if(get(x, y) == MineFieldType.BOMB)
+			return;
 		boolean[][] visited = new boolean[field.length][];
 		for (int i = 0; i < field.length; i++) {
 			visited[i] = new boolean[field[i].length];
@@ -48,7 +55,7 @@ class MineFieldImpl implements MineField {
 	}
 
 	@Override
-	public final void shuffle() {
+	public MineFieldImpl shuffle() {
 		Random rnd = new Random();
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
@@ -58,6 +65,7 @@ class MineFieldImpl implements MineField {
 				field[rndX][rndY] = tmp;
 			}
 		}
+		return this;
 	}
 
 	private void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc, boolean[][] visited) {
@@ -97,7 +105,7 @@ class MineFieldImpl implements MineField {
 	}
 
 	@Override
-	public MineFieldType get(int x, int y) {
+	public final MineFieldType get(int x, int y) {
 		return field[x][y];
 	}
 }

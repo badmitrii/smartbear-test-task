@@ -15,5 +15,4 @@ class ApplicationModule extends AbstractModule{
 		install(new PresenterModule());
 		install(new MainViewModule());
 	}
-
 }

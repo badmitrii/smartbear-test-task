@@ -15,6 +15,7 @@
 		<governator.version>1.12.13</governator.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<javax.inject>1.0</javax.inject>
+		<junit.version>4.12</junit.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -52,6 +53,12 @@
 			<artifactId>governator</artifactId>
 			<version>${governator.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
