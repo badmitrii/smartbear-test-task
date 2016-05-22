@@ -1,10 +1,14 @@
 package com.badmitrii.mine;
 
+import static com.badmitrii.mine.util.MineFieldParameters.BOMBS;
+import static com.badmitrii.mine.util.MineFieldParameters.COLUMNS;
+import static com.badmitrii.mine.util.MineFieldParameters.ROWS;
+
+import java.util.HashSet;
 import java.util.Random;
-
-import static com.badmitrii.mine.util.MineFieldParameters.*;
-
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -20,7 +24,6 @@ final class MineFieldImpl implements MineField {
 
 	/**
 	 * Puts all mines in the begin.
-	 * 
 	 */
 	@Inject
 	MineFieldImpl(@Assisted Parameters parameters) {
@@ -43,10 +46,19 @@ final class MineFieldImpl implements MineField {
 			}
 		}
 	}
+	
+	@Override
+	public void iterate(BiConsumer<Integer, Integer> bc) {
+		for (int i = 0; i < field.length; i++) {
+			for (int j = 0; j < field.length; j++) {
+				bc.accept(i, j);
+			}
+		}
+	}
 
+	@Override
 	public final void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc) {
-		if(x < 0 || y < 0)
-			throw new IndexOutOfBoundsException("Cannot proceed with negative coordinates");
+		validate(x, y);
 		if(get(x, y) == MineFieldType.BOMB)
 			return;
 		boolean[][] visited = new boolean[field.length][];
@@ -71,19 +83,29 @@ final class MineFieldImpl implements MineField {
 	}
 
 	private void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc, boolean[][] visited) {
-		if (visited[x][y] == true)
-			return;
-		bc.accept(x, y);
-		visited[x][y] = true;
-		System.out.println(String.format("%s %s", x, y));
-		if(adjacentCount(x, y, MineFieldType.BOMB) == 0)
-			processAdjacent(x, y, (i, j) -> iterateEmptyFields(i, j, bc, visited));
+		Set<Point> pointsToProcess = new HashSet<>();
+		pointsToProcess.add(new Point(x, y));
+		do {
+			pointsToProcess.forEach(p -> {
+				bc.accept(p.x, p.y);
+				visited[p.x][p.y] = true;
+			});
+			
+			Set<Point> nextToProcess = new HashSet<>();
+			BiConsumer<Integer, Integer> putIfNotVisited = (i, j) -> {
+				if(!visited[i][j])
+					nextToProcess.add(new Point(i, j));
+			};
+			pointsToProcess.stream()
+							.filter(p -> adjacentCount(p.x, p.y, MineFieldType.BOMB) == 0)
+							.forEach(p -> processAdjacent(p.x, p.y, putIfNotVisited));
+			pointsToProcess = nextToProcess;
+		} while(!pointsToProcess.isEmpty());
 	}
 
 	@Override
 	public int adjacentCount(int x, int y, MineFieldType mft) {
-		if(x < 0 || y < 0)
-			throw new IndexOutOfBoundsException("Cannot proceed with negative coordinates");
+		validate(x, y);
 		int[] count = new int[1];
 		processAdjacent(x, y, (i, j) -> {
 			if (field[i][j] == mft)
@@ -91,28 +113,53 @@ final class MineFieldImpl implements MineField {
 		});
 		return count[0];
 	}
+	
 
 	private void processAdjacent(int x, int y, BiConsumer<Integer, Integer> bc) {
-		int[] coordinates = { -1, 0, 1 };
 		IntegerValidator v = IntegerValidator.getInstance();
-		for (int i : coordinates) {
-			for (int j : coordinates) {
-				if ((i != 0 || j != 0) && v.isInRange(x + i, 0, field.length - 1) && v.isInRange(y + j, 0, field[x + i].length - 1))
-					bc.accept(x + i, y + j);
-			}
-		}
-	}
-
-	public void iterate(BiConsumer<Integer, Integer> bc) {
-		for (int i = 0; i < field.length; i++) {
-			for (int j = 0; j < field.length; j++) {
-				bc.accept(i, j);
-			}
-		}
+		IntStream.range(-1, 2)
+				.forEach(i -> {
+			IntStream.range(-1, 2)
+					.filter(j -> (i != 0 || j != 0) 
+									&& (v.isInRange(x + i, 0, field.length - 1) 
+									&& (v.isInRange(y + j, 0, field[x + i].length - 1))))
+					.forEach(j -> bc.accept(x + i, y + j));
+		});
 	}
 
 	@Override
 	public final MineFieldType get(int x, int y) {
 		return field[x][y];
+	}
+	
+	private void validate(int x, int y) {
+		if(x < 0 || y < 0)
+			throw new IndexOutOfBoundsException("Cannot proceed with negative coordinates");
+		if(x >= field.length || y >= field[x].length)
+			throw new IndexOutOfBoundsException("x, y:" + x + ", " + y);
+	}
+	
+	private static class Point{
+		final int x, y;
+		public Point(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+		
+		@Override
+		public boolean equals(Object o){
+			if(!(o instanceof Point))
+				return false;
+			Point p = (Point) o;
+			return p.x == x && p.y == y;
+		}
+		
+		@Override
+		public int hashCode(){
+			int retVal = 17;
+			retVal = x * 31 + retVal;
+			retVal = y * 31 + retVal;
+			return retVal;
+		}
 	}
 }

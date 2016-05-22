@@ -109,16 +109,18 @@ public class MineFieldImplTest {
 	public void iterateTest(){
 		int[] bombCount = new int[1];
 		mineField.iterate((x, y) -> {
-			bombCount[0]++;
+			if(mineField.get(x, y) == BOMB)
+				bombCount[0]++;
 		});
 		
 		int emptyCount[] = new int[1];
 		mineField.iterate((x, y) -> {
-			emptyCount[0]++;
+			if(mineField.get(x, y) == EMPTY)
+				emptyCount[0]++;
 		});
 		
-		Assert.assertEquals(bombCount[0], BOMBS_COUNT);
-		Assert.assertEquals(emptyCount[0], ROWS_COUNT * COLUMNS_COUNT - BOMBS_COUNT);
+		Assert.assertEquals(BOMBS_COUNT, bombCount[0]);
+		Assert.assertEquals(ROWS_COUNT * COLUMNS_COUNT - BOMBS_COUNT, emptyCount[0]);
 	}
 	
 	@Test
