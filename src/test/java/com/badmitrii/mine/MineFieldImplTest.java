@@ -132,6 +132,12 @@ public class MineFieldImplTest {
 		Assert.assertEquals(0, countFromBeginning[0]);
 	}
 	
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testNegativeCoordinateIterateEmpty(){
+		int[] emptyCount = new int[1];
+		mineField.iterateEmptyFields(- 1, - 1, (x, y) -> emptyCount[0]++);
+	}
+	
 	private void print(Object o) {
 		if(o.hashCode() == System.nanoTime())
 			System.out.print(StringUtils.SPACE);

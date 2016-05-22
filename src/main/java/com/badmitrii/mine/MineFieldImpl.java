@@ -14,7 +14,7 @@ import org.apache.commons.validator.routines.IntegerValidator;
 import com.badmitrii.util.Parameters;
 import com.google.inject.assistedinject.Assisted;
 
-class MineFieldImpl implements MineField {
+final class MineFieldImpl implements MineField {
 
 	private final MineFieldType[][] field;
 
@@ -45,6 +45,8 @@ class MineFieldImpl implements MineField {
 	}
 
 	public final void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc) {
+		if(x < 0 || y < 0)
+			throw new IndexOutOfBoundsException("Cannot proceed with negative coordinates");
 		if(get(x, y) == MineFieldType.BOMB)
 			return;
 		boolean[][] visited = new boolean[field.length][];
@@ -71,12 +73,17 @@ class MineFieldImpl implements MineField {
 	private void iterateEmptyFields(int x, int y, BiConsumer<Integer, Integer> bc, boolean[][] visited) {
 		if (visited[x][y] == true)
 			return;
-		visited[x][y] = true;
 		bc.accept(x, y);
+		visited[x][y] = true;
+		System.out.println(String.format("%s %s", x, y));
+		if(adjacentCount(x, y, MineFieldType.BOMB) == 0)
+			processAdjacent(x, y, (i, j) -> iterateEmptyFields(i, j, bc, visited));
 	}
 
 	@Override
 	public int adjacentCount(int x, int y, MineFieldType mft) {
+		if(x < 0 || y < 0)
+			throw new IndexOutOfBoundsException("Cannot proceed with negative coordinates");
 		int[] count = new int[1];
 		processAdjacent(x, y, (i, j) -> {
 			if (field[i][j] == mft)
@@ -90,7 +97,7 @@ class MineFieldImpl implements MineField {
 		IntegerValidator v = IntegerValidator.getInstance();
 		for (int i : coordinates) {
 			for (int j : coordinates) {
-				if ((i != 0 || j != 0) && v.isInRange(x + i, 0, field.length) && v.isInRange(y + j, 0, field[x + i].length))
+				if ((i != 0 || j != 0) && v.isInRange(x + i, 0, field.length - 1) && v.isInRange(y + j, 0, field[x + i].length - 1))
 					bc.accept(x + i, y + j);
 			}
 		}
