@@ -19,6 +19,8 @@ import com.badmitrii.util.Command;
 
 class MineFieldItem {
 	
+	private static final int WIDTH = 20;
+	private static final int HEIGHT = 20;
 	private static final String JBUTTON_LABEL = "JBL";
 	private static final String JLABEL_LABEL = "JLL";
 	private static final Color[] ADJANCENT_COLORS = { Color.BLUE, 					//1
@@ -45,7 +47,7 @@ class MineFieldItem {
 		container.add(label, JLABEL_LABEL);
 		container.add(button, JBUTTON_LABEL);
 		
-		button.setPreferredSize(new Dimension(20, 20));
+		button.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		button.setBackground(Color.GRAY);
 		
 		label.setFont(new Font("serif", Font.BOLD, label.getFont().getSize()));
@@ -61,7 +63,12 @@ class MineFieldItem {
 	}
 	
 	public void setBomb(BombType bombType){
-		System.out.println("Set bomb");
+		if(bombType == BombType.SIMPLE_BOMB_APPEARANCE)
+			label.setIcon(new CircleIcon(WIDTH / 4, HEIGHT / 4, Color.BLACK));
+		else if(bombType == BombType.EXPLODED_BOMB_APPEARANCE)
+			label.setIcon(new CircleIcon(WIDTH / 4, HEIGHT / 4, Color.RED));
+		else
+			throw new IllegalArgumentException("Unknown type: " + bombType);
 	}
 	
 	public void reset(){

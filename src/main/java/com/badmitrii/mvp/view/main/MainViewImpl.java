@@ -5,6 +5,7 @@ import static com.badmitrii.mine.util.GameUtils.expertParameters;
 import static com.badmitrii.mine.util.GameUtils.mediumParameters;
 
 import java.awt.Component;
+import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -23,6 +24,7 @@ import com.badmitrii.util.Parameters;
 
 class MainViewImpl implements MainView {
 
+	ResourceBundle labels = ResourceBundle.getBundle("i18n.mainView");
 	private JFrame mainFrame;
 	private JButton resetButton = new JButton();
 	private MainPresenter mainPresenter;
