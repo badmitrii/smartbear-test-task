@@ -11,6 +11,7 @@ import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.badmitrii.mine.MineField;
 import com.badmitrii.mine.MineFieldFactory;
@@ -18,6 +19,7 @@ import com.badmitrii.mine.MineFieldType;
 import com.badmitrii.mvp.view.main.MainView;
 import com.badmitrii.util.Parameters;
 
+@Singleton
 class MainPresenterImpl implements MainPresenter{
 	
 	private final MainView mainView;
@@ -55,14 +57,14 @@ class MainPresenterImpl implements MainPresenter{
 		this.mineFieldFactory = mineFieldFactory;
 	}
 	
-	@PostConstruct
-	public void init(){
-		mainView.registerPresenter(this);
-	}
+//	@PostConstruct
+//	public void init(){
+//		mainView.registerPresenter(this);
+//	}
 
 	@Override
 	public void start(Parameters parameters) {
-		mineField = mineFieldFactory.create(parameters);
+		mineField = mineFieldFactory.create(parameters).shuffle();
 		mainView.show(parameters);
 	}
 
@@ -81,12 +83,12 @@ class MainPresenterImpl implements MainPresenter{
 	@Override
 	public void newGame(Parameters parameters) {
 		mineField = mineFieldFactory.create(parameters).shuffle();
-		mainView.field().reset(parameters);
 		openedFieldCount = 0;
 		emptyFieldCount = 0;
 		mineField.iterate((x, y) -> {
 			if(mineField.get(x, y) == EMPTY)
 				emptyFieldCount++;
 		});
+		mainView.show(parameters);
 	}
 }

@@ -1,7 +1,6 @@
 package com.badmitrii.mvp.view.main;
 
 import com.badmitrii.mine.util.BombType;
-import com.badmitrii.util.Parameters;
 
 //Possible extension:
 
@@ -18,8 +17,6 @@ import com.badmitrii.util.Parameters;
 public interface FieldFragment {
 	
 	public FieldFragment reset();
-	
-	public FieldFragment reset(Parameters parameters);
 	
 	public void showBomb(int x, int y, BombType bt);
 	

@@ -44,8 +44,8 @@ class MineFieldItem {
 		button = new JButton();
 		
 		container.setLayout(cardLayout);
-		container.add(label, JLABEL_LABEL);
 		container.add(button, JBUTTON_LABEL);
+		container.add(label, JLABEL_LABEL);
 		
 		button.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		button.setBackground(Color.GRAY);
@@ -57,22 +57,26 @@ class MineFieldItem {
 	}
 	
 	public void setAdjacentMine(int adjacentCount){
-		label.setText(String.valueOf(adjacentCount));
-		label.setForeground(ADJANCENT_COLORS[adjacentCount]);
+		if(adjacentCount > 0){
+			label.setText(String.valueOf(adjacentCount));
+			label.setForeground(ADJANCENT_COLORS[adjacentCount]);
+		}
 		cardLayout.show(container, JLABEL_LABEL);
 	}
 	
 	public void setBomb(BombType bombType){
 		if(bombType == BombType.SIMPLE_BOMB_APPEARANCE)
-			label.setIcon(new CircleIcon(WIDTH / 4, HEIGHT / 4, Color.BLACK));
+			label.setIcon(new CircleIcon(WIDTH / 2, HEIGHT / 2, Color.BLACK));
 		else if(bombType == BombType.EXPLODED_BOMB_APPEARANCE)
-			label.setIcon(new CircleIcon(WIDTH / 4, HEIGHT / 4, Color.RED));
+			label.setIcon(new CircleIcon(WIDTH / 2, HEIGHT / 2, Color.RED));
 		else
 			throw new IllegalArgumentException("Unknown type: " + bombType);
+		cardLayout.show(container, JLABEL_LABEL);
 	}
 	
 	public void reset(){
 		label.setText(StringUtils.EMPTY);
+		label.setIcon(null);
 		cardLayout.show(container, JBUTTON_LABEL);
 	}
 	

@@ -35,6 +35,7 @@ class ApplicationImpl implements Application{
 			LOGGER.error("Application terminated due to an exception thrown", e);
 			System.exit(1);
 		}
+//		injector = Guice.createInjector(new ApplicationModule());
 	}
 	
 	@Override

@@ -24,9 +24,9 @@ import com.badmitrii.util.Parameters;
 
 class MainViewImpl implements MainView {
 
-	ResourceBundle labels = ResourceBundle.getBundle("i18n.mainView");
+	private ResourceBundle bundle = ResourceBundle.getBundle("i18n.mainView");
 	private JFrame mainFrame;
-	private JButton resetButton = new JButton();
+	private JButton resetButton = new JButton(bundle.getString("minesweeper.header.reset"));
 	private MainPresenter mainPresenter;
 
 	private FieldFragmentImpl fieldFragment = new FieldFragmentImpl();
@@ -35,21 +35,24 @@ class MainViewImpl implements MainView {
 	public void registerPresenter(Presenter presenter) {
 		mainPresenter = (MainPresenter) presenter;
 		fieldFragment.setClickListener(mainPresenter::handleClick);
+		resetButton.addActionListener(ev -> mainPresenter.reset());
 	}
 
 	@Override
 	public void show(Parameters parameters) {
 		SwingUtilities.invokeLater(() -> {
-			mainFrame = new JFrame("MineSweeper");
+			if(mainFrame != null)
+				mainFrame.dispose();
+			mainFrame = new JFrame(bundle.getString("minesweeper.title"));
 			JMenuBar menuBar = new JMenuBar();
-			JMenu menu = new JMenu("Game");
-			JMenuItem easyGameItem = new JMenuItem("Easy");
+			JMenu menu = new JMenu(bundle.getString("minesweeper.menu.game"));
+			JMenuItem easyGameItem = new JMenuItem(bundle.getString("minesweeper.menu.game.easy"));
 			easyGameItem.addActionListener(event -> mainPresenter.newGame(easyParameters()));
 			
-			JMenuItem mediumGameItem = new JMenuItem("Medium");
+			JMenuItem mediumGameItem = new JMenuItem(bundle.getString("minesweeper.menu.game.medium"));
 			mediumGameItem.addActionListener(event -> mainPresenter.newGame(mediumParameters()));
 			
-			JMenuItem expertGameItem = new JMenuItem("Expert");
+			JMenuItem expertGameItem = new JMenuItem(bundle.getString("minesweeper.menu.game.expert"));
 			expertGameItem.addActionListener(event -> mainPresenter.newGame(expertParameters()));
 			menu.add(easyGameItem);
 			menu.add(mediumGameItem);
@@ -59,7 +62,7 @@ class MainViewImpl implements MainView {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 			panel.add(header());
-			panel.add(fieldFragment.reset(parameters).asComponent());
+			panel.add(fieldFragment.asComponent(parameters));
 			mainFrame.add(panel);
 			mainFrame.setResizable(false);
 			mainFrame.pack();
