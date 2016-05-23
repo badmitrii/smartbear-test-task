@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badmitrii.mine.util.GameUtils;
-import com.badmitrii.mvp.Dispatcher;
 import com.badmitrii.mvp.presenter.MainPresenter;
 import com.google.inject.Injector;
 import com.netflix.governator.guice.LifecycleInjector;
@@ -35,11 +34,10 @@ class ApplicationImpl implements Application{
 			LOGGER.error("Application terminated due to an exception thrown", e);
 			System.exit(1);
 		}
-//		injector = Guice.createInjector(new ApplicationModule());
 	}
 	
 	@Override
 	public void run() {
-		injector.getInstance(Dispatcher.class).dispatch(MainPresenter.class, GameUtils.easyParameters());
+		injector.getInstance(MainPresenter.class).start(GameUtils.easyParameters());
 	}
 }

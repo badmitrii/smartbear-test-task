@@ -55,12 +55,13 @@ class MainPresenterImpl implements MainPresenter{
 	MainPresenterImpl(MainView mainView, MineFieldFactory mineFieldFactory) {
 		this.mainView = mainView;
 		this.mineFieldFactory = mineFieldFactory;
+//		mainView.registerPresenter(this);
 	}
 	
-//	@PostConstruct
-//	public void init(){
-//		mainView.registerPresenter(this);
-//	}
+	@PostConstruct
+	public void init(){
+		mainView.registerPresenter(this);
+	}
 
 	@Override
 	public void start(Parameters parameters) {
