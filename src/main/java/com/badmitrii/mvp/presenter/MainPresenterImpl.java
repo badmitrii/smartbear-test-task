@@ -21,12 +21,18 @@ import com.badmitrii.util.Parameters;
 
 @Singleton
 class MainPresenterImpl implements MainPresenter{
-	
+
+	private Parameters currentGameParameters;
 	private final MainView mainView;
 	private final MineFieldFactory mineFieldFactory;
 	private MineField mineField;
 	private int openedFieldCount;
 	private int emptyFieldCount;
+	
+	private final BiConsumer<Integer, Integer> incrementEmpty = (x, y) -> {
+		if(mineField.get(x, y) == EMPTY)
+			emptyFieldCount++;
+	};
 	
 	private Map<MineFieldType, BiConsumer<Integer, Integer>> handlers;
 	{
@@ -37,16 +43,23 @@ class MainPresenterImpl implements MainPresenter{
 				mainView.field().showBomb(i, j, SIMPLE_BOMB_APPEARANCE);
 		};
 		
+		BiConsumer<Integer, Integer> disable = (i, j) -> {
+			mainView.field().disable(i, j);
+		};
+		
 		handlers.put(BOMB, (x, y) -> {
 			mineField.iterate(showMine);
+			mineField.iterate(disable);
 			mainView.field().showBomb(x, y, EXPLODED_BOMB_APPEARANCE);
 		});
 		
 		handlers.put(EMPTY, (x, y) -> {
 			mineField.iterateEmptyFields(x, y, (i, j) -> {
 				mainView.field().showAdjacentMineCount(i, j, mineField.adjacentCount(i, j, BOMB));
-				if(++openedFieldCount == emptyFieldCount)
+				if(++openedFieldCount == emptyFieldCount){
 					mineField.iterate(showMine);
+					mineField.iterate(disable);
+				}
 			});
 		});
 	}
@@ -55,7 +68,6 @@ class MainPresenterImpl implements MainPresenter{
 	MainPresenterImpl(MainView mainView, MineFieldFactory mineFieldFactory) {
 		this.mainView = mainView;
 		this.mineFieldFactory = mineFieldFactory;
-//		mainView.registerPresenter(this);
 	}
 	
 	@PostConstruct
@@ -65,7 +77,9 @@ class MainPresenterImpl implements MainPresenter{
 
 	@Override
 	public void start(Parameters parameters) {
+		currentGameParameters = parameters;
 		mineField = mineFieldFactory.create(parameters).shuffle();
+		mineField.iterate(incrementEmpty);
 		mainView.show(parameters);
 	}
 
@@ -77,19 +91,17 @@ class MainPresenterImpl implements MainPresenter{
 	@Override
 	public void reset() {
 		mainView.field().reset();
-		mineField.shuffle();
+		mineField = mineFieldFactory.create(currentGameParameters).shuffle();
 		openedFieldCount = 0;
 	}
 
 	@Override
 	public void newGame(Parameters parameters) {
+		currentGameParameters = parameters;
 		mineField = mineFieldFactory.create(parameters).shuffle();
 		openedFieldCount = 0;
 		emptyFieldCount = 0;
-		mineField.iterate((x, y) -> {
-			if(mineField.get(x, y) == EMPTY)
-				emptyFieldCount++;
-		});
+		mineField.iterate(incrementEmpty);
 		mainView.show(parameters);
 	}
 }

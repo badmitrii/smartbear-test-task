@@ -44,6 +44,7 @@ class MainViewImpl implements MainView {
 			if(mainFrame != null)
 				mainFrame.dispose();
 			mainFrame = new JFrame(bundle.getString("minesweeper.title"));
+			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			JMenuBar menuBar = new JMenuBar();
 			JMenu menu = new JMenu(bundle.getString("minesweeper.menu.game"));
 			JMenuItem easyGameItem = new JMenuItem(bundle.getString("minesweeper.menu.game.easy"));

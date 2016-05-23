@@ -29,7 +29,7 @@ public final class GameUtils {
 		Parameters retVal = Parameters.empty();
 		retVal.put(ROWS, 10);
 		retVal.put(COLUMNS, 10);
-		retVal.put(BOMBS, 50);
+		retVal.put(BOMBS, 5);
 		return retVal;
 	}
 

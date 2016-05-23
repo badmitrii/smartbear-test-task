@@ -19,7 +19,8 @@ import com.badmitrii.util.Parameters;
 import com.google.inject.assistedinject.Assisted;
 
 final class MineFieldImpl implements MineField {
-
+	
+	private final boolean visited[][];
 	private final MineFieldType[][] field;
 
 	/**
@@ -37,6 +38,7 @@ final class MineFieldImpl implements MineField {
 		Validate.exclusiveBetween(0, columns * rows, bombs,
 				String.format("Bombs count must be a value from the interval (%s, %s). Bombs: %s", 0, rows * columns, bombs));
 		field = new MineFieldType[rows][columns];
+		visited = new boolean[rows][columns];
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				if (i * rows + j < bombs)
@@ -61,10 +63,6 @@ final class MineFieldImpl implements MineField {
 		validate(x, y);
 		if(get(x, y) == MineFieldType.BOMB)
 			return;
-		boolean[][] visited = new boolean[field.length][];
-		for (int i = 0; i < field.length; i++) {
-			visited[i] = new boolean[field[i].length];
-		}
 		iterateEmptyFields(x, y, bc, visited);
 	}
 
@@ -87,10 +85,12 @@ final class MineFieldImpl implements MineField {
 		pointsToProcess.add(new Point(x, y));
 		do {
 			pointsToProcess.forEach(p -> {
-				bc.accept(p.x, p.y);
-				visited[p.x][p.y] = true;
+				if(!visited[p.x][p.y]){
+					bc.accept(p.x, p.y);
+					visited[p.x][p.y] = true;
+				}
 			});
-			
+
 			Set<Point> nextToProcess = new HashSet<>();
 			BiConsumer<Integer, Integer> putIfNotVisited = (i, j) -> {
 				if(!visited[i][j])

@@ -75,9 +75,14 @@ class MineFieldItem {
 	}
 	
 	public void reset(){
+		button.setEnabled(true);
 		label.setText(StringUtils.EMPTY);
 		label.setIcon(null);
 		cardLayout.show(container, JBUTTON_LABEL);
+	}
+	
+	public void setEnabled(boolean enabled){
+		button.setEnabled(enabled);
 	}
 	
 	public void setActionListener(Command c){

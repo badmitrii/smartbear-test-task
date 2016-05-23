@@ -37,6 +37,11 @@ class FieldFragmentImpl implements FieldFragment{
 		items[x][y].setAdjacentMine(adjacentMineCount);
 	}
 	
+	@Override
+	public void disable(int x, int y) {
+		items[x][y].setEnabled(false);
+	}
+	
 	public void setClickListener(BiConsumer<Integer, Integer> bc){
 		this.clickListener = bc;
 	}

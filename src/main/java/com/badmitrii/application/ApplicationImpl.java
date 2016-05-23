@@ -23,6 +23,10 @@ class ApplicationImpl implements Application{
 	}
 	
 	private ApplicationImpl() {	
+		//The reason I used DI down here is that 
+		//we might want to keep track of games statistic.
+		//It's very useful to wrap low-level details into DAOs or some
+		//injecting their interfaces into a service-layer and then into presenters. 
 		injector = LifecycleInjector.builder()
 									.withModules(new ApplicationModule())
 									.build()

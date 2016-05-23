@@ -20,5 +20,7 @@ public interface FieldFragment {
 	
 	public void showBomb(int x, int y, BombType bt);
 	
+	public void disable(int x, int y);
+	
 	public void showAdjacentMineCount(int x, int y, int adjacentMineCount);
 }

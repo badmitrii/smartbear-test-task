@@ -1,5 +1,3 @@
 package com.badmitrii.util;
 
-public interface ParameterMetaData<T> {
-
-}
+public interface ParameterMetaData<T> { }

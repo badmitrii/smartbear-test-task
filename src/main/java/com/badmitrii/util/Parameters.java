@@ -1,7 +1,5 @@
 package com.badmitrii.util;
 
-import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * Type-safe parameter container
@@ -12,14 +10,6 @@ public interface Parameters {
 		return new ParametersImpl();
 	}
 	
-	/**
-	 * Returns an empty {@code Parameters} with a given underlying storage.
-	 * The supplier has to return an <b>empty</b> {@code Map}. 
-	 */
-	public static Parameters empty(Supplier<Map<Object, Object>> storageSupplier){
-		return new ParametersImpl(storageSupplier);
-	}
-
 	/**
 	 * Associates {@code ParameterMetaData} with a given value. {@code null} value is permitted.
 	 */
