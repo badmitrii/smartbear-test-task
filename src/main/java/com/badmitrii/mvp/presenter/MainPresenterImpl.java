@@ -35,7 +35,15 @@ class MainPresenterImpl implements MainPresenter{
 	};
 	
 	private Map<MineFieldType, BiConsumer<Integer, Integer>> handlers;
-	{
+	
+	@Inject
+	MainPresenterImpl(MainView mainView, MineFieldFactory mineFieldFactory) {
+		this.mainView = mainView;
+		this.mineFieldFactory = mineFieldFactory;
+		attachHandlers();
+	}
+	
+	private void attachHandlers(){
 		handlers = new HashMap<>();
 		
 		BiConsumer<Integer, Integer> showMine = (i, j) -> {
@@ -63,12 +71,7 @@ class MainPresenterImpl implements MainPresenter{
 			});
 		});
 	}
-	
-	@Inject
-	MainPresenterImpl(MainView mainView, MineFieldFactory mineFieldFactory) {
-		this.mainView = mainView;
-		this.mineFieldFactory = mineFieldFactory;
-	}
+
 	
 	@PostConstruct
 	public void init(){
